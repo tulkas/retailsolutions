@@ -1,0 +1,30 @@
+#map-content-div
+{
+	position: relative;
+	top: 0;
+	left: 0;
+}
+
+.map 
+{
+	position: relative;
+	top: 0;
+	left: 0;
+	width: 600px;
+}
+
+.visualization
+{
+	margin-top: 10px;
+}
+.summary
+{
+	margin-top: 10px;
+}
+.top-row
+{
+	height: 100px;
+	background-color: grey;
+	font-face: "Courier";
+}
+

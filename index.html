@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+		<meta charset="utf-8" />
+		<link rel="shortcut icon" href="">
+		<title>Retail Solutions Dashboard</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- <link rel="stylesheet" href="dashboard.css"> -->
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+      <style>
+      #map-content-div
+{
+	position: relative;
+	top: 0;
+	left: 0;
+}
+
+.map 
+{
+	position: relative;
+	top: 0;
+	left: 0;
+	width: 600px;
+}
+
+.visualization
+{
+	margin-top: 10px;
+}
+.summary
+{
+	margin-top: 10px;
+}
+.top-row
+{
+	height: 100px;
+	background-color: grey;
+	font-face: "Courier";
+}
+
+</style>
+</head>
+<body>
+		<div class="container">
+            <div class="row top-row">
+               <h1> &nbsp;Retail Solutions Dashboard Prototype</h1>
+            </div>
+				<div class="row">
+						<div class="col-sm-4">
+							 <div class="summary">
+									<ul class="nav nav-tabs">
+										<li class="active"><a data-toggle="tab" href="#live">Live</a></li>
+										<li><a data-toggle="tab" href="#today">Today</a></li>
+										<li><a data-toggle="tab" href="#week">This Week</a></li>
+									</ul>
+									<div class="tab-content">
+                           	<div id="live" class="tab-pane fade in active">
+                                 <br>
+                           		<h4>Live Status of the store</h4>
+                           		<h5>Total customers : <span id="total"></span> </h5>
+                           		<h5>Registered customers : <span id="registered"></span></h5>
+                                 <h5>New customers : <span id="new"></span></h5>
+                                 <h5>Male : <span id="men"></span>&nbsp;&nbsp;Female : <span id="women"></span></h5>
+                                 <div><canvas id="popChart" width="400" height="200"></canvas></div>
+                           	</div>
+                           	<div id="today" class="tab-pane fade">
+                           		<br>
+                                 <h4>Summary of today's customers</h4>
+                                 <h5>Total customers : 142 </h5>
+                                 <h5>Registered customers : 13 </h5>
+                                 <h5>New customers : 129 </h5>
+                                 <h5>Male : 64 &nbsp;&nbsp;Female : 78</h5>
+                           	</div>
+                           	<div id="week" class="tab-pane fade">
+                           		<br>
+                                 <h4>Summary of this week's customers</h4>
+                                 <h5>Total customers : 1004 </h5>
+                                 <h5>Registered customers : 91</h5>
+                                 <h5>New customers : 913</h5>
+                                 <h5>Male : 447&nbsp;&nbsp;Female : 557</h5>
+                           	</div>
+                           </div>
+							 </div>
+						</div>
+						<div class="col-sm-8">
+								<div class="visualization">
+										<div id="map-content-div">
+												<img src="store-map.png" class="map">
+												<a id="popover-1" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+														<img id="icon-1">
+												</a>
+												<a id="popover-2" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+														<img id="icon-2">
+												</a>
+												<a id="popover-3" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+														<img id="icon-3">
+												</a>
+												<a id="popover-4" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+														<img id="icon-4">
+												</a>
+												<a id="popover-5" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+														<img id="icon-5">
+												</a>
+												<a id="popover-6" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+														<img id="icon-6">
+												</a>
+												<a id="popover-7" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+														<img id="icon-7">
+												</a>
+												<a id="popover-8" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+														<img id="icon-8">
+												</a>
+										</div>
+								</div>
+						</div>
+						<div class="col-sm-4">
+						</div>
+				</div>
+		</div>
+		<script>
+				 var dict = {
+						1: [80,420],
+						2: [110, 480],
+						3: [265,480],
+						4: [300, 405],
+						5: [300,200],
+						6: [265,80],
+						7: [110,80],
+						8: [80,180]
+						};
+				
+				$(document).ready(function(){
+						$('[data-toggle="popover"]').popover();	 
+				});
+				for (i=1; i<9; i++)
+				{
+						document.getElementById("popover-"+i).style.top = dict[i][0]+"px";
+						document.getElementById("popover-"+i).style.left = dict[i][1]+"px";
+						document.getElementById("icon-"+i).style.height = "25px";
+						document.getElementById("popover-"+i).style.position = "absolute";
+						document.getElementById("icon-"+i).src="man-unregistered.png";
+				}
+				//assumption image is 600px wide
+				var timestamps= {
+   "1": [
+      {
+         "Location": 3,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 25,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 2,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 29,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 4,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 38,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 46,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 51,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 7,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 59,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 61,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 66,
+         "Emotion": "Attentive"
+      }
+   ],
+   "2": [
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 20,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 8,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 27,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 30,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 4,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 30,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 1,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 44,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 6,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 61,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 7,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 63,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 66,
+         "Emotion": "Neutral"
+      }
+   ],
+   "3": [
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 24,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 28,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 7,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 30,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 4,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 42,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 6,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 52,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 1,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 55,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 3,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 59,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 8,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 59,
+         "Emotion": "Attentive"
+      }
+   ],
+   "4": [
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 23,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 39,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 40,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 7,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 41,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 5,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 42,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 57,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 57,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 4,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 66,
+         "Emotion": "Neutral"
+      }
+   ],
+   "5": [
+      {
+         "Location": 5,
+         "Name": "Yash",
+         "Gender": "Male",
+         "Age": 22,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 39,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 1,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 43,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 47,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 55,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 4,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 57,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 3,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 67,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 7,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 68,
+         "Emotion": "Bored"
+      }
+   ],
+   "6": [
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 21,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 7,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 25,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 5,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 26,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 26,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 28,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 6,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 28,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 39,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 4,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 50,
+         "Emotion": "Bored"
+      }
+   ],
+   "7": [
+      {
+         "Location": 2,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 20,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 7,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 22,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 5,
+         "Name": "Yash",
+         "Gender": "Male",
+         "Age": 26,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 39,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 39,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 4,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 41,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 3,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 63,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 65,
+         "Emotion": "Attentive"
+      }
+   ],
+   "8": [
+      {
+         "Location": 3,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 20,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 7,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 27,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 6,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 35,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 35,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 1,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 41,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 2,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 49,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 5,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 49,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 4,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 70,
+         "Emotion": "Attentive"
+      }
+   ],
+   "9": [
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 35,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 41,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 44,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 63,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 66,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 7,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 67,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 67,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 4,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 70,
+         "Emotion": "Attentive"
+      }
+   ],
+   "10": [
+      {
+         "Location": 6,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 33,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 39,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 4,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 44,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 51,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 52,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 7,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 53,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 2,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 58,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 1,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 65,
+         "Emotion": "Attentive"
+      }
+   ],
+   "11": [
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 21,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 1,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 24,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 25,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 28,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 7,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 29,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 2,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 33,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 3,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 48,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 4,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 61,
+         "Emotion": "Attentive"
+      }
+   ],
+   "12": [
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 27,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 36,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 4,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 44,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 2,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 48,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 1,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 54,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 7,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 56,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 6,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 69,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 70,
+         "Emotion": "Neutral"
+      }
+   ],
+   "13": [
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 37,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 45,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 47,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 5,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 48,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 7,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 51,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 4,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 53,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 1,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 63,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 3,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 63,
+         "Emotion": "Bored"
+      }
+   ],
+   "14": [
+      {
+         "Location": 7,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 25,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 29,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 6,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 42,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 1,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 43,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 2,
+         "Name": "Yash",
+         "Gender": "Male",
+         "Age": 59,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 3,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 65,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 65,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 4,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 70,
+         "Emotion": "Bored"
+      }
+   ],
+   "15": [
+      {
+         "Location": 2,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 20,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 7,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 25,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 27,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 4,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 29,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 3,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 37,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 37,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 59,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 65,
+         "Emotion": "Attentive"
+      }
+   ],
+   "16": [
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 36,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 4,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 39,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 5,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 50,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 52,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 3,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 60,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 6,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 62,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 7,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 66,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 66,
+         "Emotion": "Attentive"
+      }
+   ],
+   "17": [
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 22,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 2,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 24,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 6,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 35,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 4,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 43,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 48,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 56,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 7,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 63,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 8,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 69,
+         "Emotion": "Bored"
+      }
+   ],
+   "18": [
+      {
+         "Location": 1,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 27,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 31,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 8,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 38,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 4,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 47,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 61,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 6,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 61,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 3,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 62,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 7,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 68,
+         "Emotion": "Attentive"
+      }
+   ],
+   "19": [
+      {
+         "Location": 1,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 24,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 24,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 8,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 38,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 7,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 39,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 4,
+         "Name": "Yash",
+         "Gender": "Male",
+         "Age": 40,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 3,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 57,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 5,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 63,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 65,
+         "Emotion": "Neutral"
+      }
+   ],
+   "20": [
+      {
+         "Location": 7,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 26,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 5,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 30,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 36,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 38,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 1,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 41,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 49,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 6,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 53,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 4,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 69,
+         "Emotion": "Neutral"
+      }
+   ],
+   "21": [
+      {
+         "Location": 7,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 20,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 21,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 36,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 4,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 37,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 37,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 5,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 43,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 56,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 60,
+         "Emotion": "Neutral"
+      }
+   ],
+   "22": [
+      {
+         "Location": 8,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 23,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 1,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 27,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 27,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 7,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 42,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 45,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 4,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 51,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 2,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 56,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 58,
+         "Emotion": "Neutral"
+      }
+   ],
+   "23": [
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 21,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 4,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 37,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 8,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 41,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 42,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 44,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 3,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 47,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 1,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 48,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 7,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 69,
+         "Emotion": "Attentive"
+      }
+   ],
+   "24": [
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 30,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 4,
+         "Name": "Yash",
+         "Gender": "Male",
+         "Age": 34,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 5,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 38,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 54,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 62,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 1,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 64,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 68,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 7,
+         "Name": "Yash",
+         "Gender": "Male",
+         "Age": 70,
+         "Emotion": "Bored"
+      }
+   ],
+   "25": [
+      {
+         "Location": 8,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 30,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 6,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 34,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 2,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 41,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 48,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 48,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 3,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 58,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 4,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 60,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 7,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 68,
+         "Emotion": "Neutral"
+      }
+   ],
+   "26": [
+      {
+         "Location": 2,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 34,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 34,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 42,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 46,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 1,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 48,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 7,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 58,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 5,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 60,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 4,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 70,
+         "Emotion": "Neutral"
+      }
+   ],
+   "27": [
+      {
+         "Location": 3,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 23,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 41,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 41,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 7,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 50,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 55,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 6,
+         "Name": "Akbar",
+         "Gender": "Male",
+         "Age": 56,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 4,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 57,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 8,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 68,
+         "Emotion": "Attentive"
+      }
+   ],
+   "28": [
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 22,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 24,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 7,
+         "Name": "Rohini",
+         "Gender": "Female",
+         "Age": 30,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 3,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 46,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 5,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 47,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 58,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 4,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 65,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 69,
+         "Emotion": "Neutral"
+      }
+   ],
+   "29": [
+      {
+         "Location": 7,
+         "Name": "Sugandha",
+         "Gender": "Female",
+         "Age": 24,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 6,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 33,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 4,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 38,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 3,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 48,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 8,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 51,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 1,
+         "Name": "Swetha",
+         "Gender": "Female",
+         "Age": 54,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 5,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 55,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 2,
+         "Name": "Vishal",
+         "Gender": "Male",
+         "Age": 64,
+         "Emotion": "Bored"
+      }
+   ],
+   "30": [
+      {
+         "Location": 3,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 20,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 4,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 21,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 6,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 35,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 2,
+         "Name": "NA",
+         "Gender": "Male",
+         "Age": 38,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 8,
+         "Name": "Anuraj",
+         "Gender": "Male",
+         "Age": 41,
+         "Emotion": "Bored"
+      },
+      {
+         "Location": 1,
+         "Name": "NA",
+         "Gender": "NA",
+         "Age": 42,
+         "Emotion": "Attentive"
+      },
+      {
+         "Location": 7,
+         "Name": "NA",
+         "Gender": "Female",
+         "Age": 51,
+         "Emotion": "Neutral"
+      },
+      {
+         "Location": 5,
+         "Name": "Navya",
+         "Gender": "Female",
+         "Age": 59,
+         "Emotion": "Attentive"
+      }
+   ]
+};
+				var j=1;
+				function myLoop () {					 //	create a loop function
+						setTimeout(function () {		//	call a 3s setTimeout when the loop is called
+							//console.log(1);
+							var config= timestamps[j];
+                     var registered=0;
+                     var unregistered=0;
+                     var male=0;
+                     var female=0;
+                     var groups=[0,0,0,0,0,0];
+								for (i=0; i<8; i++)
+								{
+										if (config[i]["Gender"]=="NA")
+										{
+												document.getElementById("popover-"+config[i]["Location"]).style.display = "none";
+												document.getElementById("icon-"+config[i]["Location"]).style.display = "none";
+												//console.log(1);
+										}
+										else
+										{	 
+                                    groups[(Math.floor(config[i]["Age"]/10)-2)]++;
+												document.getElementById("popover-"+config[i]["Location"]).style.display = "unset";
+												document.getElementById("icon-"+config[i]["Location"]).style.display = "unset";
+												$("#popover-"+config[i]["Location"]).attr('data-content', ("Gender - "+config[i]["Gender"]+"<br>Age - "+config[i]["Age"]+"<br>Emotion - "+config[i]["Emotion"]));
+												//document.getElementById("popover-"+i).data-content = ("Gender - "+config[i][1]+"Age - "+config[i][2]);
+												if (config[i]["Name"]=="NA")
+												{
+                                       unregistered++;
+													 if (config[i]["Gender"]=="Male")
+													 {
+														document.getElementById("icon-"+config[i]["Location"]).src="man-unregistered.png";
+                                          male++;
+													 }
+													 else
+													 {
+														 document.getElementById("icon-"+config[i]["Location"]).src="woman-unregistered.png"; 
+                                           female++;
+													 }
+													 // document.getElementById("popover-"+config[i]["Location"]).title = "Unregistered Visitor";
+														$("#popover-"+config[i]["Location"]).attr('data-original-title', "Unregistered Visitor");
+
+												}
+												else
+												{
+                                       registered++;
+														//document.getElementById("popover-"+config[i]["Location"]).title = config[i]["Name"];
+													 if (config[i]["Gender"]=="Male")
+													 {
+														document.getElementById("icon-"+config[i]["Location"]).src="man-registered.png";
+                                          male++;
+													 }
+													 else
+													 {
+														 document.getElementById("icon-"+config[i]["Location"]).src="woman-registered.png"; 
+                                           female++;
+													 }
+														 $("#popover-"+config[i]["Location"]).attr('data-original-title',config[i]["Name"] );
+												}
+										}
+								}
+                     //console.log(groups);
+
+                     document.getElementById("registered").innerHTML=registered;
+                     document.getElementById("total").innerHTML=(registered+unregistered);
+                     document.getElementById("new").innerHTML=unregistered;
+                     document.getElementById("men").innerHTML=male;
+                     document.getElementById("women").innerHTML=female;	
+                     var popCanvas = document.getElementById("popChart");
+                     Chart.defaults.global.defaultFontFamily = "Lato";
+                     Chart.defaults.global.defaultFontSize = 18;
+                     var barChart = new Chart(popCanvas, {
+                       type: 'bar',
+                       data: {
+                       labels: ["20-30", "30-40", "40-50", "50-60", "60-70","70+"],
+                       datasets: [{ 
+                        label: "Number of customers",
+                        data: groups,
+                         backgroundColor: 
+                             'rgba(255, 99, 132, 0.2)'
+                           ,
+                           borderColor: 
+                             'rgba(255,99,132,1)',
+                           borderWidth: 1
+                       }]
+                        },
+                        options :
+                          {
+                           responsive: false,
+                           scales: {
+                             yAxes: [{
+                                 ticks: {
+                                     beginAtZero: true,
+                                     stepSize: 1
+                                 }
+                             }]
+                           }
+                           }   
+                     });
+         				//	your code here
+							j++;											 //	increment the counter
+							if (j < 30) {						//	if the counter < 10, call the loop function
+								 myLoop();						 //	..	again which will trigger another 
+							}												//	..	setTimeout()
+					 }, 4000)
+				}
+
+				myLoop();			
+		</script>
+</body>
