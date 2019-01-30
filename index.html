@@ -2,12 +2,13 @@
 <html>
 
 <head>
+      <link rel="shortcut icon" href="https://www.wowso.me/hubfs/assets/website/images/favicon.png">
 		<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
 		<meta charset="utf-8" />
 		<link rel="shortcut icon" href="">
 		<title>Retail Solutions Dashboard</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-		<!-- <link rel="stylesheet" href="dashboard.css"> -->
+		<link rel="stylesheet" href="dashboard.css">
 		<!-- Optional theme -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
@@ -15,65 +16,49 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+      <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
       <style>
-      #map-content-div
-{
-	position: relative;
-	top: 0;
-	left: 0;
-}
 
-.map 
-{
-	position: relative;
-	top: 0;
-	left: 0;
-	width: 600px;
-}
-
-.visualization
-{
-	margin-top: 10px;
-}
-.summary
-{
-	margin-top: 10px;
-}
-.top-row
-{
-	height: 100px;
-	background-color: grey;
-	font-face: "Courier";
-}
 
 </style>
 </head>
 <body>
-		<div class="container">
+		<div class="container-fluid">
             <div class="row top-row">
-               <h1> &nbsp;Retail Solutions Dashboard Prototype</h1>
+               <h3> &nbsp;RETAIL SOLUTIONS DASHBOARD</h3>
             </div>
-				<div class="row">
-						<div class="col-sm-4">
+				<div class="row main-content">
+                  <div class="col-sm-1">
+                  </div>
+						<div class="col-sm-6">
 							 <div class="summary">
-									<ul class="nav nav-tabs">
+
+									<ul class="nav nav-tabs nav-justified">
 										<li class="active"><a data-toggle="tab" href="#live">Live</a></li>
 										<li><a data-toggle="tab" href="#today">Today</a></li>
 										<li><a data-toggle="tab" href="#week">This Week</a></li>
 									</ul>
 									<div class="tab-content">
                            	<div id="live" class="tab-pane fade in active">
-                                 <br>
-                           		<h4>Live Status of the store</h4>
-                           		<h5>Total customers : <span id="total"></span> </h5>
-                           		<h5>Registered customers : <span id="registered"></span></h5>
-                                 <h5>New customers : <span id="new"></span></h5>
-                                 <h5>Male : <span id="men"></span>&nbsp;&nbsp;Female : <span id="women"></span></h5>
-                                 <div><canvas id="popChart" width="400" height="200"></canvas></div>
+                                 <div class="row">
+                              		<h4>&nbsp;&nbsp;&nbsp;LIVE STATUS OF THE STORE</h4>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-sm-6">
+                                       <h5>Total customers : <span id="total"></span> </h5>
+                                 		<h5>Registered customers : <span id="registered"></span></h5>
+                                       <h5>New customers : <span id="new"></span></h5>
+                                       <br>
+                                    <h5><img src="icn_man.png" class="gender-icon"> : <span id="men"></span>&nbsp;&nbsp;&nbsp;<img src="icn_woman.png" class="gender-icon"> : <span id="women"></span></h5>
+                                    </div>
+                                    <div class="col-sm-6"><canvas id="popChart" width="300" height="200"></canvas></div>
+                                 </div>
                            	</div>
                            	<div id="today" class="tab-pane fade">
                            		<br>
-                                 <h4>Summary of today's customers</h4>
+                                 <h4>SUMMARY OF TODAY'S CUSTOMERS</h4>
+                                 <br>
                                  <h5>Total customers : 142 </h5>
                                  <h5>Registered customers : 13 </h5>
                                  <h5>New customers : 129 </h5>
@@ -81,7 +66,8 @@
                            	</div>
                            	<div id="week" class="tab-pane fade">
                            		<br>
-                                 <h4>Summary of this week's customers</h4>
+                                 <h4>SUMMARY OF THIS WEEK'S CUSTOMERS</h4>
+                                 <br>
                                  <h5>Total customers : 1004 </h5>
                                  <h5>Registered customers : 91</h5>
                                  <h5>New customers : 913</h5>
@@ -90,51 +76,56 @@
                            </div>
 							 </div>
 						</div>
-						<div class="col-sm-8">
+                  <div class="col-sm-1">
+                  </div>
+						<div class="col-sm-5">
 								<div class="visualization">
 										<div id="map-content-div">
 												<img src="store-map.png" class="map">
-												<a id="popover-1" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+												<a id="popover-1" href="#" data-html="true" title="Loading" data-toggle="popover" data-trigger="hover" data-content="Loading">
 														<img id="icon-1">
 												</a>
-												<a id="popover-2" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+												<a id="popover-2" href="#" data-html="true" title="Loading" data-toggle="popover" data-trigger="hover" data-content="Loading">
 														<img id="icon-2">
 												</a>
-												<a id="popover-3" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+												<a id="popover-3" href="#" data-html="true" title="Loading  " data-toggle="popover" data-trigger="hover" data-content="Loading">
 														<img id="icon-3">
 												</a>
-												<a id="popover-4" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+												<a id="popover-4" href="#" data-html="true" title="Loading" data-toggle="popover" data-trigger="hover" data-content="Loading">
 														<img id="icon-4">
 												</a>
-												<a id="popover-5" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+												<a id="popover-5" href="#" data-html="true" title="Loading" data-toggle="popover" data-trigger="hover" data-content="Loading">
 														<img id="icon-5">
 												</a>
-												<a id="popover-6" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+												<a id="popover-6" href="#" data-html="true" title="Loading" data-toggle="popover" data-trigger="hover" data-content="Loading">
 														<img id="icon-6">
 												</a>
-												<a id="popover-7" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+												<a id="popover-7" href="#" data-html="true" title="Loading" data-toggle="popover" data-trigger="hover" data-content="Loading">
 														<img id="icon-7">
 												</a>
-												<a id="popover-8" href="#" data-html="true" title="Something" data-toggle="popover" data-trigger="hover" data-content="blabla">
+												<a id="popover-8" href="#" data-html="true" title="Loading" data-toggle="popover" data-trigger="hover" data-content="Loading">
 														<img id="icon-8">
 												</a>
 										</div>
 								</div>
+                        <p class="footer">
+                     &copy; 2019 <a href="www.wowso.me">www.wowso.me</a>
+                     </p>
 						</div>
-						<div class="col-sm-4">
-						</div>
+						
 				</div>
+            
 		</div>
 		<script>
 				 var dict = {
-						1: [80,420],
-						2: [110, 480],
-						3: [265,480],
-						4: [300, 405],
-						5: [300,200],
+						1: [80,310],//done
+						2: [130, 340],//done
+						3: [265,340],
+						4: [350, 310],
+						5: [310,130],
 						6: [265,80],
-						7: [110,80],
-						8: [80,180]
+						7: [130,80],
+						8: [80,140]
 						};
 				
 				$(document).ready(function(){
@@ -1960,7 +1951,7 @@
                      document.getElementById("women").innerHTML=female;	
                      var popCanvas = document.getElementById("popChart");
                      Chart.defaults.global.defaultFontFamily = "Lato";
-                     Chart.defaults.global.defaultFontSize = 18;
+                     Chart.defaults.global.defaultFontSize = 12;
                      var barChart = new Chart(popCanvas, {
                        type: 'bar',
                        data: {
@@ -1969,10 +1960,10 @@
                         label: "Number of customers",
                         data: groups,
                          backgroundColor: 
-                             'rgba(255, 99, 132, 0.2)'
+                             'rgba(0,0,0,1)'
                            ,
                            borderColor: 
-                             'rgba(255,99,132,1)',
+                             'rgba(0,0,0,1)',
                            borderWidth: 1
                        }]
                         },
